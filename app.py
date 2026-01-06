@@ -82,3 +82,14 @@ with c6:
     st.page_link("pages/6_🏆_Leaderboard.py", label="Hall of Fame", icon="🏆", use_container_width=True)
 
     st.warning("**Global Rankings**")
+
+# --- Row 3 (AI Section) ---
+st.divider() # Adds a nice line to separate sections
+st.subheader("🤖 AI Assistance")
+
+# Create a new column layout (we center the button)
+c7, c8, c9 = st.columns([1, 2, 1])
+
+with c8: # This puts the button in the middle column so it looks important
+    st.page_link("pages/7_🤖_AI_Tutor.py", label="Chat with AI Tutor", icon="🤖", use_container_width=True)
+    st.info("**Need help? Ask the Robot!** (Experimental)")
