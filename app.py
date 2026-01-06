@@ -68,11 +68,16 @@ with c3:
 
 # Row 2
 c4, c5, c6 = st.columns(3)
+
 with c4:
     st.page_link("pages/4_🧩_Discrete_Math.py", label="Discrete Math", icon="🧩", use_container_width=True)
     st.error("Logic & Sets")
+
 with c5:
     st.page_link("pages/5_📝_Quiz.py", label="Final Quiz", icon="📝", use_container_width=True)
     st.info("**Test Yourself**")
+
 with c6:
-    st.write("More coming soon...")
+    # 🆕 THIS IS THE NEW LINK
+    st.page_link("pages/6_🏆_Leaderboard.py", label="Hall of Fame", icon="🏆", use_container_width=True)
+    st.warning("**Global Rankings**")
