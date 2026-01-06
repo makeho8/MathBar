@@ -78,6 +78,7 @@ with c5:
     st.info("**Test Yourself**")
 
 with c6:
-    # 🆕 THIS IS THE NEW LINK
+    # 🆕 THIS IS THE NEW LINK of page 6
     st.page_link("pages/6_🏆_Leaderboard.py", label="Hall of Fame", icon="🏆", use_container_width=True)
+
     st.warning("**Global Rankings**")
