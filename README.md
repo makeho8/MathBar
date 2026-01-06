@@ -241,3 +241,150 @@ with c6:
 ```
 
 **That is the full system.** You have built a secure, cloud-connected application. 🚀
+
+Smart choice! We will use **Google's Gemini API**.
+
+Why?
+
+1. **It is Free:** They have a very generous free tier for developers.
+2. **It is Smart:** It is excellent at math and logic.
+3. **It is Fast:** Perfect for a tutor bot.
+
+Here is the plan to give your robot a real brain.
+
+---
+
+### Step 1: Get Your Free API Key 🔑
+
+1. Go to **[Google AI Studio](https://aistudio.google.com/app/apikey)**.
+2. Click the blue button **"Create API Key"**.
+3. (If asked) Select your "MathBar" project (or create a new one).
+4. Copy the key (it starts with `AIza...`).
+
+---
+
+### Step 2: Save the Key in Streamlit Secrets 🔒
+
+Just like we did for the Google Sheet, we need to hide this password.
+
+1. Go to **Streamlit Cloud Dashboard**  App Settings  **Secrets**.
+2. Add a new section at the bottom (below the `[google_sheets]` part).
+
+**Paste this:**
+
+```toml
+[gemini]
+api_key = "PASTE_YOUR_AIza_KEY_HERE"
+
+```
+
+3. Click **Save**.
+
+---
+
+### Step 3: Update `requirements.txt` 📦
+
+We need a new tool to talk to Google's brain.
+
+1. Open `requirements.txt` in GitHub/Thonny.
+2. Add this line at the bottom:
+```text
+google-generativeai
+
+```
+
+
+3. **Commit** the change.
+
+---
+
+### Step 4: The Real AI Code 🧠
+
+Now, let's perform the brain transplant. We will replace the "Parrot" code with the "Gemini" code.
+
+**Open `pages/7_🤖_AI_Tutor.py` and replace EVERYTHING with this:**
+
+```python
+import streamlit as st
+import google.generativeai as genai
+
+st.set_page_config(page_title="AI Math Tutor", page_icon="🤖")
+
+st.title("🤖 AI Math Tutor")
+st.caption("Powered by Google Gemini")
+
+# --- 1. SETUP THE BRAIN ---
+try:
+    # Get the key from Secrets
+    api_key = st.secrets["gemini"]["api_key"]
+    genai.configure(api_key=api_key)
+    
+    # Select the model (Flash is fast and free)
+    model = genai.GenerativeModel('gemini-1.5-flash')
+except Exception as e:
+    st.error("Missing API Key! Please add it to Streamlit Secrets.")
+    st.stop()
+
+# --- 2. CHAT HISTORY ---
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Display old messages
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+# --- 3. THE CHAT LOOP ---
+if prompt := st.chat_input("Ask a math question (e.g., 'Explain derivatives')..."):
+    
+    # A. Show User Message
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    # B. Generate AI Response
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        message_placeholder.markdown("Thinking... 🤔")
+        
+        try:
+            # Create a prompt specifically for a Math Tutor
+            # We tell the AI how to behave
+            tutor_instruction = """
+            You are a friendly and helpful Math Tutor for students.
+            - Explain concepts simply.
+            - Use emojis to make it fun.
+            - If there is a calculation, show the steps.
+            - Use LaTeX for math formulas (like $x^2$).
+            
+            Student Question: 
+            """
+            
+            full_prompt = tutor_instruction + prompt
+            
+            # Send to Google
+            response = model.generate_content(full_prompt)
+            ai_text = response.text
+            
+            # Show Result
+            message_placeholder.markdown(ai_text)
+            
+            # C. Save AI Message
+            st.session_state.messages.append({"role": "assistant", "content": ai_text})
+            
+        except Exception as e:
+            message_placeholder.error(f"Error: {e}")
+
+```
+
+### 🚀 Launch It!
+
+1. Update `requirements.txt` (Don't forget this! Or the app will crash).
+2. Save your API Key in Secrets.
+3. Update the code in `7_🤖_AI_Tutor.py`.
+
+**Wait 1 minute, refresh your app, and ask it:**
+*"Explain the quadratic formula to me."*
+
+If it writes back a full explanation with math symbols... **You have successfully integrated Artificial Intelligence!** 🤖🎓
+
