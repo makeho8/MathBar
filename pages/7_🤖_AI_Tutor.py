@@ -13,7 +13,8 @@ try:
     genai.configure(api_key=api_key)
     
     # Select the model (Flash is fast and free)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    # Select the model (Pro is the standard stable version)
+    model = genai.GenerativeModel('gemini-pro')
 except Exception as e:
     st.error("Missing API Key! Please add it to Streamlit Secrets.")
     st.stop()
@@ -67,3 +68,4 @@ if prompt := st.chat_input("Ask a math question (e.g., 'Explain derivatives')...
             
         except Exception as e:
             message_placeholder.error(f"Error: {e}")
+
