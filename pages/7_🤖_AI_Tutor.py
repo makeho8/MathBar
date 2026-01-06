@@ -18,8 +18,8 @@ try:
         all_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
         
         # Prefer the fast one, fallback to the standard one, or take whatever is there
-        if "models/gemini-2.5-flash" in all_models:
-            model_name = "models/gemini-2.5-flash"
+        if "models/gemini-1.5-flash" in all_models:
+            model_name = "models/gemini-1.5-flash"
         elif "models/gemini-pro" in all_models:
             model_name = "models/gemini-pro"
         else:
@@ -69,4 +69,5 @@ if prompt := st.chat_input("Ask me a math question..."):
             
         except Exception as e:
             placeholder.error(f"Error: {e}")
+
 
