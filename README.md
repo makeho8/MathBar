@@ -55,20 +55,6 @@ If you need to fix this later, here is where everything is:
 | **Streamlit Secrets** | The Password | `[google_sheets]` (Where the invisible key lives). |
 | **Google Sheets** | The Storage | Columns: `Name`, `XP`, `Date`. |
 
-### You are now a Developer 🎓
-
-You have faced the three most common nightmares of a software engineer:
-
-1. **Deployment Errors** (GitHub folders).
-2. **Secret Management** (JSON parsing).
-3. **Permission/API Errors** (Google Cloud 403s).
-
-And you solved them all. Your app is live, persistent, and global. Great work!
-
-This is the **Master Manual** for the Leaderboard. 📘
-
-Save this note. If you ever build another app (or if this one breaks), this is the exact recipe to rebuild the database connection from scratch.
-
 ---
 
 ### Phase 1: The Google Setup (The Vault) 🏛️
@@ -129,133 +115,11 @@ json_key = '{"type": "service_account", "project_id": "...", ...}'
 
 ```
 
-
-
-
 *(We used a Python script to generate this single-line string to avoid errors).*
 
 ---
 
-### Phase 3: The Code (The Brains) 🧠
 
-Here is the final, error-free code for **`pages/6_🏆_Leaderboard.py`**.
-
-It includes the **Two Scopes** (Sheets + Drive) which fixed your final error.
-
-```python
-import streamlit as st
-import pandas as pd
-import gspread
-from google.oauth2.service_account import Credentials
-import json
-from datetime import datetime
-
-st.set_page_config(page_title="Leaderboard", page_icon="🏆")
-
-# --- 1. CONNECT TO DATABASE ---
-def get_db_connection():
-    """Establishes the connection to Google Sheets."""
-    
-    # A. Load the Key from Secrets
-    key_dict = json.loads(st.secrets["google_sheets"]["json_key"])
-    
-    # B. Define Permissions (The Scopes)
-    # We need BOTH Sheets (to write) and Drive (to find the file)
-    scope = [
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive"
-    ]
-    
-    # C. Authorize
-    creds = Credentials.from_service_account_info(key_dict, scopes=scope)
-    client = gspread.authorize(creds)
-    
-    # D. Open the specific Sheet
-    sheet = client.open("MathBar_Database").sheet1
-    return sheet
-
-# --- 2. DISPLAY CURRENT STATS ---
-st.title("🏆 Hall of Fame")
-
-if 'xp' not in st.session_state:
-    st.session_state.xp = 0
-
-st.info(f"Your Current Score: **{st.session_state.xp} XP**")
-
-# --- 3. SAVE SCORE FORM ---
-with st.form("save_score"):
-    st.write("### 💾 Submit Your Score")
-    name = st.text_input("Enter your Name:")
-    submitted = st.form_submit_button("Join the Leaderboard")
-    
-    if submitted:
-        if name and st.session_state.xp > 0:
-            try:
-                sheet = get_db_connection()
-                # Get current time
-                date_now = datetime.now().strftime("%Y-%m-%d %H:%M")
-                # Add row: [Name, XP, Date]
-                sheet.append_row([name, st.session_state.xp, date_now])
-                st.success(f"Success! {name} has been recorded.")
-            except Exception as e:
-                st.error(f"Connection Error: {e}")
-        else:
-            st.warning("You need a name and a score higher than 0!")
-
-# --- 4. SHOW LEADERBOARD ---
-st.divider()
-st.subheader("🌍 Top Players")
-
-try:
-    sheet = get_db_connection()
-    data = sheet.get_all_records()
-    
-    if data:
-        df = pd.DataFrame(data)
-        # Sort by XP (Highest on top)
-        df = df.sort_values(by="XP", ascending=False)
-        # Add Rank (1, 2, 3...)
-        df.insert(0, 'Rank', range(1, 1 + len(df)))
-        
-        st.dataframe(df, hide_index=True, use_container_width=True)
-    else:
-        st.write("No players yet. Be the first!")
-        
-except Exception as e:
-    st.error("Could not load leaderboard.")
-
-```
-
----
-
-### Phase 4: The Navigation (The Door) 🚪
-
-Don't forget to add the button in **`app.py`** so people can find the page!
-
-```python
-with c6:
-    st.page_link("pages/6_🏆_Leaderboard.py", 
-                 label="Hall of Fame", 
-                 icon="🏆", 
-                 use_container_width=True)
-    st.warning("**Global Rankings**")
-
-```
-
-*Chat-bot*
-**That is the full system.** You have built a secure, cloud-connected application. 🚀
-
-Smart choice! We will use **Google's Gemini API**.
-
-Why?
-
-1. **It is Free:** They have a very generous free tier for developers.
-2. **It is Smart:** It is excellent at math and logic.
-3. **It is Fast:** Perfect for a tutor bot.
-
-Here is the plan to give your robot a real brain.
-
----
 
 ### Step 1: Get Your Free API Key 🔑
 
@@ -295,9 +159,6 @@ We need a new tool to talk to Google's brain.
 google-generativeai>=0.7.2
 
 ```
-
-
-3. **Commit** the change.
 
 ---
 
@@ -384,12 +245,26 @@ if prompt := st.chat_input("Ask me a math question..."):
 
 ### 🚀 Launch It!
 
-1. Update `requirements.txt` (Don't forget this! Or the app will crash).
-2. Save your API Key in Secrets.
-3. Update the code in `7_🤖_AI_Tutor.py`.
-
-**Wait 1 minute, refresh your app, and ask it:**
-*"Explain the quadratic formula to me."*
-
-If it writes back a full explanation with math symbols... **You have successfully integrated Artificial Intelligence!** 🤖🎓
-
+📂 mathbar/
+ ├── 📄 app.py
+ ├── 📂 pages/                     (The Menu Buttons - Keep these files TINY)
+ │    ├── 1_🚀_Advanced_Math.py
+ │    ├── 2_🌀_Specialized_Math.py
+ │    ├── 3_🎲_Prob_Stats.py
+ │    ├── 4_🧩_Discrete_Math.py
+ │    ├── 5_📐_Linear_Algebra.py
+ │    ├── 6_∫_Calculus_Single.py
+ │    └── 7_∬_Calculus_Multi.py
+ │
+ └── 📂 materials/                 (The Heavy Content - Put the long code here)
+      ├── 📂 advanced_math/
+      │    ├── content.py          <-- The Textbook (Text/Latex/Graphs)
+      │    ├── quiz.py             <-- The Practice Questions
+      │    └── slides.py           <-- The Presentation Logic
+      │
+      ├── 📂 specialized_math/     (Same 3 files inside...)
+      ├── 📂 prob_stats/           (Same 3 files inside...)
+      ├── 📂 discrete_math/        (Same 3 files inside...)
+      ├── 📂 linear_algebra/       (Same 3 files inside...)
+      ├── 📂 calculus_single/      (Same 3 files inside...)
+      └── 📂 calculus_multi/       (Same 3 files inside...)
