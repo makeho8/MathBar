@@ -1,5 +1,28 @@
 # MathBar
 **Full-Stack Web Application**.
+📂 mathbar/
+ ├── 📄 app.py
+ ├── 📂 pages/                     (The Menu Buttons - Keep these files TINY)
+ │    ├── 1_🚀_Advanced_Math.py
+ │    ├── 2_🌀_Specialized_Math.py
+ │    ├── 3_🎲_Prob_Stats.py
+ │    ├── 4_🧩_Discrete_Math.py
+ │    ├── 5_📐_Linear_Algebra.py
+ │    ├── 6_∫_Calculus_Single.py
+ │    └── 7_∬_Calculus_Multi.py
+ │
+ └── 📂 materials/                 (The Heavy Content - Put the long code here)
+      ├── 📂 advanced_math/
+      │    ├── content.py          <-- The Textbook (Text/Latex/Graphs)
+      │    ├── quiz.py             <-- The Practice Questions
+      │    └── slides.py           <-- The Presentation Logic
+      │
+      ├── 📂 specialized_math/     (Same 3 files inside...)
+      ├── 📂 prob_stats/           (Same 3 files inside...)
+      ├── 📂 discrete_math/        (Same 3 files inside...)
+      ├── 📂 linear_algebra/       (Same 3 files inside...)
+      ├── 📂 calculus_single/      (Same 3 files inside...)
+      └── 📂 calculus_multi/       (Same 3 files inside...)
 
 Most beginners stop at "running code on their laptop." You have gone much further: you built a frontend, deployed it to the cloud, and connected it to a live database.
 
@@ -242,29 +265,3 @@ if prompt := st.chat_input("Ask me a math question..."):
             placeholder.error(f"Error: {e}")
 
 ```
-
-### 🚀 Launch It!
-
-📂 mathbar/
- ├── 📄 app.py
- ├── 📂 pages/                     (The Menu Buttons - Keep these files TINY)
- │    ├── 1_🚀_Advanced_Math.py
- │    ├── 2_🌀_Specialized_Math.py
- │    ├── 3_🎲_Prob_Stats.py
- │    ├── 4_🧩_Discrete_Math.py
- │    ├── 5_📐_Linear_Algebra.py
- │    ├── 6_∫_Calculus_Single.py
- │    └── 7_∬_Calculus_Multi.py
- │
- └── 📂 materials/                 (The Heavy Content - Put the long code here)
-      ├── 📂 advanced_math/
-      │    ├── content.py          <-- The Textbook (Text/Latex/Graphs)
-      │    ├── quiz.py             <-- The Practice Questions
-      │    └── slides.py           <-- The Presentation Logic
-      │
-      ├── 📂 specialized_math/     (Same 3 files inside...)
-      ├── 📂 prob_stats/           (Same 3 files inside...)
-      ├── 📂 discrete_math/        (Same 3 files inside...)
-      ├── 📂 linear_algebra/       (Same 3 files inside...)
-      ├── 📂 calculus_single/      (Same 3 files inside...)
-      └── 📂 calculus_multi/       (Same 3 files inside...)
